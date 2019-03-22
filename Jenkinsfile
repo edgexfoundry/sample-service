@@ -8,7 +8,7 @@ node('centos7-docker-4c-2g') {
         configFileProvider(
             [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
 
-            sh 'env | sort'
+            sh 'cat $MAVEN_SETTINGS | base64'
             semver()
         }
     }
