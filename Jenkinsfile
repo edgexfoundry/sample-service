@@ -22,7 +22,7 @@ def setupEnvironment(vars) {
     }
 }
 
-def semver(command, credentials = 'edgex-jenkins-ssh', debug = true) {
+def semver(command = null, credentials = 'edgex-jenkins-ssh', debug = true) {
     def semverCommand = [
        'git',
        'semver'
