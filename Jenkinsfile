@@ -1,6 +1,24 @@
 node('centos7-docker-4c-2g') {
-    stage('SSH-Agent Test') {
+    stage('Clone') {
+        def gitVars = checkout scm
+        setupEnvironment(gitVars)
+    }
+
+    stage('Semver Test') {
+        sh 'env | sort'
         semver()
+    }
+}
+
+def setupEnvironment(vars) {
+    if(vars != null) {
+        vars.each { k, v ->
+            env.setProperty(k, v)
+            if(k == 'GIT_BRANCH') {
+                env.setProperty('SEMVER_BRANCH', v.replaceAll( /^origin\//, '' ))
+                env.setProperty('GIT_BRANCH_CLEAN', v.replaceAll('/', '_'))
+            }
+        }
     }
 }
 
