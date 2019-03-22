@@ -108,5 +108,5 @@ def releaseStream(branchName) {
 }
 
 def getStreams() {
-    [/.*master/, /.*delhi/, /.*edinburgh/]
+    [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
 }
