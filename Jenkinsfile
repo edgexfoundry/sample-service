@@ -1,19 +1,61 @@
 node('centos7-docker-4c-2g') {
-    stage('Clone') {
+    stage('👭 Clone 👬') {
         def gitVars = checkout scm
+
         setupEnvironment(gitVars)
     }
 
-    stage('Semver Test') {
-        semver 'init'
+    stage('🍳 Prep Builder') {
+        def buildArgs = [
+            '-f docker/Dockerfile',
+            '.'
+        ]
+        buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
     }
 
-    // stage('Docker Login') {
-    //     configFileProvider(
-    //         [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
-    //           // nexus docker login stuff here?
-    //     }
-    // }
+    stage('💉 Test') {
+        buildImage.inside {
+            sh 'make test'
+        }
+    }
+
+    // Master branch
+    if(releaseStream(env.GIT_BRANCH)) {
+        // This will create a local tag with the current version
+        stage('🏷️ Semver Tag') {
+            semver('tag')
+        }
+
+        // Stage artifacts on Nexus ???
+        stage('📦 Upload Artifact Mockup') {
+            sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
+            sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
+        }
+
+        stage('⬆️ Semver Bump Patch Version') {
+            semver('bump patch')
+            semver('-push')
+        }
+    }
+    // everything else
+    else {
+        stage('Non-Release Branch or PR') {
+            //if Using the GHPRB plugin
+            if(env.ghprbActualCommit) {
+                println "Triggered by GHPRB plugin doing extra stuff maybe?"
+
+                if(env.ghprbCommentBody != "null") {
+                    if(env.ghprbCommentBody =~ /^recheck$/) {
+                      //No semver functions on recheck
+                      echo 'Recheck'
+                    }
+                }
+                else {
+                    //No semver stuff on new pr or push?
+                }
+            }
+        }
+    }
 }
 
 def setupEnvironment(vars) {
@@ -24,6 +66,21 @@ def setupEnvironment(vars) {
                 env.setProperty('SEMVER_BRANCH', v.replaceAll( /^origin\//, '' ))
                 env.setProperty('GIT_BRANCH_CLEAN', v.replaceAll('/', '_'))
             }
+        }
+    }
+
+    if(releaseStream(env.GIT_BRANCH)) {
+        // stage('Docker Login') {
+        //     configFileProvider(
+        //         [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
+        //           // nexus docker login stuff here?
+        //     }
+        // }
+
+        semver 'init'
+
+        docker.image('ernestoojeda/git-semver:alpine').inside {
+            env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
         }
     }
 }
@@ -44,4 +101,12 @@ def semver(command = null, credentials = 'edgex-jenkins-ssh', debug = true) {
             }
         }
     }
+}
+
+def releaseStream(branchName) {
+    (getStreams().collect { branchName =~ it ? true : false }).contains(true)
+}
+
+def getStreams() {
+    [/.*master/, /.*delhi/, /.*edinburgh/]
 }
