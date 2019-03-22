@@ -5,13 +5,15 @@ node('centos7-docker-4c-2g') {
     }
 
     stage('Semver Test') {
-        configFileProvider(
-            [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
-
-            sh 'cat $MAVEN_SETTINGS | base64'
-            semver()
-        }
+        semver 'init'
     }
+
+    // stage('Docker Login') {
+    //     configFileProvider(
+    //         [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
+    //           // nexus docker login stuff here?
+    //     }
+    // }
 }
 
 def setupEnvironment(vars) {
