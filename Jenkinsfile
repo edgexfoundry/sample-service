@@ -14,7 +14,7 @@ node('centos7-docker-4c-2g') {
     }
 
     stage('💉 Test') {
-        buildImage.inside('-v /tmp:/tmp') {
+        buildImage.inside('-u 0:0') {
             sh 'make test'
         }
     }
