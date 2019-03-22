@@ -5,8 +5,12 @@ node('centos7-docker-4c-2g') {
     }
 
     stage('Semver Test') {
-        sh 'env | sort'
-        semver()
+        configFileProvider(
+            [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
+
+            sh 'env | sort'
+            semver()
+        }
     }
 }
 
