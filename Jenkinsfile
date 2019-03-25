@@ -43,7 +43,7 @@ node(BUILD_NODE) {
     if(isReleaseStream()) {
         // This will create a local tag with the current version
         stage('🏷️ Semver Tag') {
-            semver('tag')
+            edgeXSemver('tag')
         }
 
         // Stage artifacts on Nexus ???
@@ -58,8 +58,8 @@ node(BUILD_NODE) {
         }
 
         stage('⬆️ Semver Bump Patch Version') {
-            semver('bump patch')
-            semver('-push')
+            edgeXSemver('bump patch')
+            edgeXSemver('-push')
         }
     }
     // everything else
