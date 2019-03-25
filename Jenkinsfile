@@ -1,4 +1,6 @@
-node('centos7-docker-4c-2g') {
+def buildNode = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
+
+node(buildNode) {
     stage('👭 Clone 👬') {
         def gitVars = checkout scm
 
