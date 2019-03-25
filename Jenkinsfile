@@ -1,14 +1,31 @@
 def buildNode = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
 
+library(identifier: 'edgex-global-pipelines@master', 
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'git@github.com:ernestojeda/edgex-global-pipelines.git',
+        traits: [ gitBranchDiscovery(),
+                [ $class: 'SubmoduleOptionTrait', extension: [recursiveSubmodules: true]] 
+        ]
+    ])
+) _
+
 node(buildNode) {
     sh 'uname -m'
 
     stage('👭 Clone 👬') {
-        def gitVars = checkout scm
-
-        setupEnvironment(gitVars)
-
+        edgeXScmCheckout()
         sh 'env | sort'
+    }
+/*
+    if(releaseStream(env.GIT_BRANCH)) {
+        stage('Semver Init') {
+            semver 'init'
+
+            docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
+                env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
+            }
+        }
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -75,33 +92,34 @@ node(buildNode) {
             }
         }
     }
+    */
 }
 
-def setupEnvironment(vars) {
-    if(vars != null) {
-        vars.each { k, v ->
-            env.setProperty(k, v)
-            if(k == 'GIT_BRANCH') {
-                env.setProperty('SEMVER_BRANCH', v.replaceAll( /^origin\//, '' ))
-                env.setProperty('GIT_BRANCH_CLEAN', v.replaceAll('/', '_'))
-            }
-        }
-    }
+// def setupEnvironment(vars) {
+//     if(vars != null) {
+//         vars.each { k, v ->
+//             env.setProperty(k, v)
+//             if(k == 'GIT_BRANCH') {
+//                 env.setProperty('SEMVER_BRANCH', v.replaceAll( /^origin\//, '' ))
+//                 env.setProperty('GIT_BRANCH_CLEAN', v.replaceAll('/', '_'))
+//             }
+//         }
+//     }
 
-    // set default architecture
-    if(!env.ARCH) {
-        def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
-        env.setProperty('ARCH', vmArch)
-    }
+//     // set default architecture
+//     if(!env.ARCH) {
+//         def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
+//         env.setProperty('ARCH', vmArch)
+//     }
 
-    if(releaseStream(env.GIT_BRANCH)) {
-        semver 'init'
+//     if(releaseStream(env.GIT_BRANCH)) {
+//         semver 'init'
 
-        docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
-            env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
-        }
-    }
-}
+//         docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
+//             env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
+//         }
+//     }
+// }
 
 def semver(command = null, credentials = 'edgex-jenkins-ssh', debug = true) {
     def semverCommand = [
