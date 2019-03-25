@@ -1,6 +1,8 @@
 def buildNode = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
 
 node(buildNode) {
+    sh 'uname -m'
+
     stage('👭 Clone 👬') {
         def gitVars = checkout scm
 
@@ -84,7 +86,7 @@ def setupEnvironment(vars) {
     if(releaseStream(env.GIT_BRANCH)) {
         semver 'init'
 
-        docker.image('ernestoojeda/git-semver:alpine').inside {
+        docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
             env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
         }
     }
@@ -105,7 +107,7 @@ def semver(command = null, credentials = 'edgex-jenkins-ssh', debug = true) {
     if(debug) { semverCommand << '-debug' }
     if(command) { semverCommand << command }
 
-    docker.image('ernestoojeda/git-semver:alpine').inside('-v /etc/ssh:/etc/ssh') {
+    docker.image("ernestoojeda/git-semver:${env.ARCH}").inside('-v /etc/ssh:/etc/ssh') {
         withEnv(['SSH_KNOWN_HOSTS=/etc/ssh/ssh_known_hosts']) {
             sshagent (credentials: [credentials]) {
                 sh semverCommand.join(' ')
@@ -119,5 +121,5 @@ def releaseStream(branchName) {
 }
 
 def getStreams() {
-    [/.*master/, /.*delhi/, /.*edinburgh/]
+    [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
 }
