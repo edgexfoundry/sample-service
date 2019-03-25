@@ -3,23 +3,31 @@ node('centos7-docker-4c-2g') {
         def gitVars = checkout scm
 
         setupEnvironment(gitVars)
+
+        sh 'env | sort'
     }
 
-    stage('Verify') {
-        stage('🍳 Prep Builder') {
-            def buildArgs = [
-                '-f docker/Dockerfile',
-                '.'
-            ]
-            buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
-        }
+    //////////////////////////////////////////////////////////////////////
+    // {project-name}-verify-pipeline
+    //////////////////////////////////////////////////////////////////////
 
-        stage('💉 Test') {
-            buildImage.inside('-u 0:0') {
-                sh 'make test'
-            }
+    stage('🍳 Prep Builder') {
+        def buildArgs = [
+            '-f docker/Dockerfile',
+            '.'
+        ]
+        buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
+    }
+
+    stage('💉 Test') {
+        buildImage.inside('-u 0:0') {
+            sh 'make test'
         }
     }
+
+    //////////////////////////////////////////////////////////////////////
+    // {project-name}-merge-pipeline
+    //////////////////////////////////////////////////////////////////////
 
     // Master branch
     if(releaseStream(env.GIT_BRANCH)) {
@@ -72,18 +80,16 @@ def setupEnvironment(vars) {
     }
 
     if(releaseStream(env.GIT_BRANCH)) {
-        // stage('Docker Login') {
-        //     configFileProvider(
-        //         [configFile(fileId: 'sandbox-settings', variable: 'MAVEN_SETTINGS')]) {
-        //           // nexus docker login stuff here?
-        //     }
-        // }
-
         semver 'init'
 
         docker.image('ernestoojeda/git-semver:alpine').inside {
             env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
         }
+    }
+
+    // set default architecture
+    if(!env.ARCH) {
+        env.setProperty('ARCH', 'amd64')
     }
 }
 
