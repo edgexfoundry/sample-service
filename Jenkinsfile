@@ -9,7 +9,7 @@ library(identifier: 'edgex-global-pipelines@master',
             $class: 'SubmoduleOption',
             recursiveSubmodules: true,
         ]],
-        userRemoteConfigs: [[url: 'git@github.com:ernestojeda/edgex-global-pipelines.git']]])
+        userRemoteConfigs: [[url: 'https://github.com/ernestojeda/edgex-global-pipelines.git']]])
 ) _
 
 library identifier: 'edgex-global-pipelines@master', retriever: legacySCM([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:ernestojeda/edgex-global-pipelines.git']]])
