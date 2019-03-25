@@ -1,22 +1,20 @@
 loadGlobalLibrary()
 
-def buildNode = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
+def BUILD_NODE = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
+def RELEASE_STREAMS = [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
 
-node(buildNode) {
-    sh 'uname -m'
-
+node(BUILD_NODE) {
     stage('👭 Clone 👬') {
         edgeXScmCheckout()
         sh 'env | sort'
     }
-/*
-    if(releaseStream(env.GIT_BRANCH)) {
-        stage('Semver Init') {
-            semver 'init'
 
-            docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
-                env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
-            }
+    if(isReleaseStream()) {
+        stage('Semver Init') {
+            edgeXSemver 'init'
+
+            def semverVersion = edgeXSemver()
+            env.setProperty('VERSION', semverVersion)
         }
     }
 
@@ -43,7 +41,7 @@ node(buildNode) {
     //////////////////////////////////////////////////////////////////////
 
     // Master branch
-    if(releaseStream(env.GIT_BRANCH)) {
+    if(isReleaseStream()) {
         // This will create a local tag with the current version
         stage('🏷️ Semver Tag') {
             semver('tag')
@@ -84,34 +82,7 @@ node(buildNode) {
             }
         }
     }
-    */
 }
-
-// def setupEnvironment(vars) {
-//     if(vars != null) {
-//         vars.each { k, v ->
-//             env.setProperty(k, v)
-//             if(k == 'GIT_BRANCH') {
-//                 env.setProperty('SEMVER_BRANCH', v.replaceAll( /^origin\//, '' ))
-//                 env.setProperty('GIT_BRANCH_CLEAN', v.replaceAll('/', '_'))
-//             }
-//         }
-//     }
-
-//     // set default architecture
-//     if(!env.ARCH) {
-//         def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
-//         env.setProperty('ARCH', vmArch)
-//     }
-
-//     if(releaseStream(env.GIT_BRANCH)) {
-//         semver 'init'
-
-//         docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
-//             env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
-//         }
-//     }
-// }
 
 def loadGlobalLibrary() {
     library(identifier: 'edgex-global-pipelines@master', 
@@ -127,28 +98,8 @@ def loadGlobalLibrary() {
     ) _
 }
 
-def semver(command = null, credentials = 'edgex-jenkins-ssh', debug = true) {
-    def semverCommand = [
-       'git',
-       'semver'
-    ]
-
-    if(debug) { semverCommand << '-debug' }
-    if(command) { semverCommand << command }
-
-    docker.image("ernestoojeda/git-semver:${env.ARCH}").inside('-v /etc/ssh:/etc/ssh') {
-        withEnv(['SSH_KNOWN_HOSTS=/etc/ssh/ssh_known_hosts']) {
-            sshagent (credentials: [credentials]) {
-                sh semverCommand.join(' ')
-            }
-        }
-    }
-}
-
-def releaseStream(branchName) {
-    (getStreams().collect { branchName =~ it ? true : false }).contains(true)
-}
-
-def getStreams() {
-    [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
+def isReleaseStream(branchName = env.GIT_BRANCH) {
+    branchName
+        ? (RELEASE_STREAMS.collect { branchName =~ it ? true : false }).contains(true)
+        : false
 }
