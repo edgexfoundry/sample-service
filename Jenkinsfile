@@ -1,14 +1,19 @@
 def buildNode = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
 
 library(identifier: 'edgex-global-pipelines@master', 
-    retriever: modernSCM([
-        $class: 'GitSCMSource',
-        remote: 'git@github.com:ernestojeda/edgex-global-pipelines.git',
-        traits: [ gitBranchDiscovery(),
-                [ $class: 'SubmoduleOptionTrait', extension: [recursiveSubmodules: true]] 
-        ]
-    ])
+    retriever: legacySCM([
+        $class: 'GitSCM',
+        branches: [[name: '*/master']],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [[
+            $class: 'SubmoduleOption',
+            recursiveSubmodules: true,
+        ]],
+        userRemoteConfigs: [[url: 'git@github.com:ernestojeda/edgex-global-pipelines.git']]])
 ) _
+
+library identifier: 'edgex-global-pipelines@master', retriever: legacySCM([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:ernestojeda/edgex-global-pipelines.git']]])
+
 
 node(buildNode) {
     sh 'uname -m'
