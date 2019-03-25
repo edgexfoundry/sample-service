@@ -46,6 +46,11 @@ node(buildNode) {
             sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
         }
 
+        stage('🖋️ Mock Sigul Signing') {
+            sh 'echo lftools sigul branch v${VERSION}'
+            sh 'echo lftools sigul docker v${VERSION}'
+        }
+
         stage('⬆️ Semver Bump Patch Version') {
             semver('bump patch')
             semver('-push')
