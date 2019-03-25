@@ -1,7 +1,6 @@
 loadGlobalLibrary()
 
 def BUILD_NODE = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
-def RELEASE_STREAMS = [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
 
 node(BUILD_NODE) {
     stage('👭 Clone 👬') {
@@ -99,7 +98,8 @@ def loadGlobalLibrary() {
 }
 
 def isReleaseStream(branchName = env.GIT_BRANCH) {
+    def releaseStreams = [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
     branchName
-        ? (RELEASE_STREAMS.collect { branchName =~ it ? true : false }).contains(true)
+        ? (releaseStreams.collect { branchName =~ it ? true : false }).contains(true)
         : false
 }
