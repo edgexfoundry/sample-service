@@ -5,17 +5,19 @@ node('centos7-docker-4c-2g') {
         setupEnvironment(gitVars)
     }
 
-    stage('🍳 Prep Builder') {
-        def buildArgs = [
-            '-f docker/Dockerfile',
-            '.'
-        ]
-        buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
-    }
+    stage('Verify') {
+        stage('🍳 Prep Builder') {
+            def buildArgs = [
+                '-f docker/Dockerfile',
+                '.'
+            ]
+            buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
+        }
 
-    stage('💉 Test') {
-        buildImage.inside('-u 0:0') {
-            sh 'make test'
+        stage('💉 Test') {
+            buildImage.inside('-u 0:0') {
+                sh 'make test'
+            }
         }
     }
 
