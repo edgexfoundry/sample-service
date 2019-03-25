@@ -89,7 +89,8 @@ def setupEnvironment(vars) {
 
     // set default architecture
     if(!env.ARCH) {
-        env.setProperty('ARCH', 'amd64')
+        def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
+        env.setProperty('ARCH', vmArch)
     }
 }
 
