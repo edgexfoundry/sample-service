@@ -83,18 +83,18 @@ def setupEnvironment(vars) {
         }
     }
 
+    // set default architecture
+    if(!env.ARCH) {
+        def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
+        env.setProperty('ARCH', vmArch)
+    }
+
     if(releaseStream(env.GIT_BRANCH)) {
         semver 'init'
 
         docker.image("ernestoojeda/git-semver:${env.ARCH}").inside {
             env.setProperty('VERSION', sh(script: 'git semver', returnStdout: true).trim())
         }
-    }
-
-    // set default architecture
-    if(!env.ARCH) {
-        def vmArch = sh(script: 'uname -m', returnStdout: true).trim()
-        env.setProperty('ARCH', vmArch)
     }
 }
 
