@@ -31,7 +31,7 @@ node(BUILD_NODE) {
     //////////////////////////////////////////////////////////////////////
 
     edgeXMergeStage {
-        stage('Semver Init') {
+        stage('🎬 Semver Init') {
             edgeXSemver 'init'
 
             //set the version number on the environment
