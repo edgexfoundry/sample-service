@@ -50,7 +50,7 @@ node(BUILD_NODE) {
         }
 
         // Stage artifacts on Nexus ???
-        stage('📦 Mock Upload Artifact') {
+        stage('📦 Mock Upload Artifacts') {
             sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
             sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
         }
