@@ -30,8 +30,7 @@ node(BUILD_NODE) {
     // {project-name}-merge-pipeline
     //////////////////////////////////////////////////////////////////////
 
-    // Master branch
-    edgeXReleaseStage {
+    edgeXMergeStage {
         stage('Semver Init') {
             edgeXSemver 'init'
 
