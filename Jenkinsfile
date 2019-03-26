@@ -8,15 +8,6 @@ node(BUILD_NODE) {
         sh 'env | sort'
     }
 
-    if(isReleaseStream()) {
-        stage('Semver Init') {
-            edgeXSemver 'init'
-
-            def semverVersion = edgeXSemver()
-            env.setProperty('VERSION', semverVersion)
-        }
-    }
-
     //////////////////////////////////////////////////////////////////////
     // {project-name}-verify-pipeline
     //////////////////////////////////////////////////////////////////////
@@ -40,7 +31,14 @@ node(BUILD_NODE) {
     //////////////////////////////////////////////////////////////////////
 
     // Master branch
-    if(isReleaseStream()) {
+    edgeXReleaseStage {
+        stage('Semver Init') {
+            edgeXSemver 'init'
+
+            def semverVersion = edgeXSemver()
+            env.setProperty('VERSION', semverVersion)
+        }
+
         // This will create a local tag with the current version
         stage('🏷️ Semver Tag') {
             edgeXSemver('tag')
@@ -62,17 +60,16 @@ node(BUILD_NODE) {
             edgeXSemver('-push')
         }
     }
-    // everything else
-    else {
+
+    edgeXPRStage {
         stage('Non-Release Branch or PR') {
-            //if Using the GHPRB plugin
             if(env.ghprbActualCommit) {
                 println "Triggered by GHPRB plugin doing extra stuff maybe?"
 
                 if(env.ghprbCommentBody != "null") {
                     if(env.ghprbCommentBody =~ /^recheck$/) {
-                      //No semver functions on recheck
-                      echo 'Recheck'
+                        //No semver functions on recheck
+                        echo 'Recheck'
                     }
                 }
                 else {
@@ -87,19 +84,13 @@ def loadGlobalLibrary() {
     library(identifier: 'edgex-global-pipelines@master', 
         retriever: legacySCM([
             $class: 'GitSCM',
+            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry-holding/edgex-global-pipelines.git']],
             branches: [[name: '*/master']],
             doGenerateSubmoduleConfigurations: false,
             extensions: [[
                 $class: 'SubmoduleOption',
                 recursiveSubmodules: true,
-            ]],
-            userRemoteConfigs: [[url: 'https://github.com/ernestojeda/edgex-global-pipelines.git']]])
+            ]]]
+        )
     ) _
-}
-
-def isReleaseStream(branchName = env.GIT_BRANCH) {
-    def releaseStreams = [/.*master/, /.*delhi/, /.*edinburgh/, /.*git-semver/]
-    branchName
-        ? (releaseStreams.collect { branchName =~ it ? true : false }).contains(true)
-        : false
 }
