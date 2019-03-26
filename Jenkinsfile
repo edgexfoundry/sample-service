@@ -35,6 +35,7 @@ node(BUILD_NODE) {
         stage('Semver Init') {
             edgeXSemver 'init'
 
+            //set the version number on the environment
             def semverVersion = edgeXSemver()
             env.setProperty('VERSION', semverVersion)
         }
@@ -44,15 +45,15 @@ node(BUILD_NODE) {
             edgeXSemver('tag')
         }
 
-        // Stage artifacts on Nexus ???
-        stage('📦 Upload Artifact Mockup') {
-            sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
-            sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
-        }
-
         stage('🖋️ Mock Sigul Signing') {
             sh 'echo lftools sigul branch v${VERSION}'
             sh 'echo lftools sigul docker v${VERSION}'
+        }
+
+        // Stage artifacts on Nexus ???
+        stage('📦 Mock Upload Artifact') {
+            sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
+            sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
         }
 
         stage('⬆️ Semver Bump Patch Version') {
