@@ -5,7 +5,6 @@ def BUILD_NODE = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
 node(BUILD_NODE) {
     stage('👭 Clone 👬') {
         edgeXScmCheckout()
-        sh 'env | sort'
     }
 
     //////////////////////////////////////////////////////////////////////
