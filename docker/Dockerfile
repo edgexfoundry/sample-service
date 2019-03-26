@@ -11,7 +11,7 @@ ENV GOCACHE=/tmp/.cache
 RUN sed -e 's/dl-cdn[.]alpinelinux.org/nl.alpinelinux.org/g' -i~ /etc/apk/repositories
 
 # add git for go modules
-RUN apk update && apk add make git curl gcc libc-dev
+RUN apk update && apk add make git
 
 WORKDIR /go/src/github.com/edgexfoundry
 
