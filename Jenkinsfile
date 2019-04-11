@@ -1,92 +1,128 @@
+//
+// Copyright (c) 2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 loadGlobalLibrary()
 
-def BUILD_NODE = env.BUILD_NODE ?: 'centos7-docker-4c-2g'
-
-node(BUILD_NODE) {
-    stage('👭 Clone 👬') {
-        echo "Hello from Demo"
-
-        edgeXScmCheckout()
+pipeline {
+    agent {
+        label 'centos7-docker-4c-2g'
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // {project-name}-verify-pipeline
-    //////////////////////////////////////////////////////////////////////
-
-    stage('🍳 Prep Builder') {
-        def buildArgs = [
-            '-f docker/Dockerfile',
-            '.'
-        ]
-        buildImage = docker.build("go-builder:${GIT_BRANCH_CLEAN}", buildArgs.join(' '))
+    options {
+        timestamps()
     }
 
-    stage('💉 Test') {
-        buildImage.inside('-u 0:0') {
-            sh 'make test'
+    stages {
+        stage('🚿 LF Prep') {
+            steps {
+                edgeXDockerLogin(settingsFile: env.MVN_SETTINGS)
+            }
         }
-    }
 
-    //////////////////////////////////////////////////////////////////////
-    // {project-name}-merge-pipeline
-    //////////////////////////////////////////////////////////////////////
+        stage('🛠️ Multi-Arch Build') {
+            // fan out
+            parallel {
+                stage('💉 Test amd64') {
+                    agent {
+                        dockerfile {
+                            filename 'docker/Dockerfile'
+                            label 'centos7-docker-4c-2g'
+                            args '-u 0:0' // needed for go mod cache
+                        }
+                    }
+                    steps {
+                        sh 'make test'
+                    }
+                }
+                stage('💉Test arm64') {
+                    agent {
+                        dockerfile {
+                            filename 'docker/Dockerfile'
+                            label 'ubuntu18.04-docker-arm64-4c-2g'
+                            args '-u 0:0' // needed for go mod cache
+                        }
+                    }
+                    steps {
+                        sh 'make test'
+                    }
+                }
+            }
+        }
 
-    edgeXMergeStage {
         stage('🎬 Semver Init') {
-            edgeXSemver 'init'
-
-            //set the version number on the environment
-            def semverVersion = edgeXSemver()
-            env.setProperty('VERSION', semverVersion)
+            when { expression { edgex.isReleaseStream() } }
+            steps {
+                edgeXSemver 'init'
+                script {
+                    def semverVersion = edgeXSemver()
+                    env.setProperty('VERSION', semverVersion)
+                }
+            }
         }
 
-        // This will create a local tag with the current version
         stage('🏷️ Semver Tag') {
-            edgeXSemver('tag')
+            when { expression { edgex.isReleaseStream() } }
+            steps {
+                edgeXSemver('tag')
+            }
         }
 
         stage('🖋️ Mock Sigul Signing') {
-            sh 'echo lftools sigul branch v${VERSION}'
-            sh 'echo lftools sigul docker v${VERSION}'
+            when { expression { edgex.isReleaseStream() } }
+            steps {
+                sh 'echo lftools sigul branch v${VERSION}'
+                sh 'echo lftools sigul docker v${VERSION}'
+            }
         }
 
-        // Stage artifacts on Nexus ???
-        stage('📦 Mock Upload Artifacts') {
-            sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
-            sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
+        stage('📦 Mock Push Docker Image') {
+            when { expression { edgex.isReleaseStream() } }
+            steps {
+                sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
+                sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
+            }
         }
 
         stage('⬆️ Semver Bump Patch Version') {
-            edgeXSemver('bump patch')
-            edgeXSemver('-push')
+            when { expression { edgex.isReleaseStream() } }
+            steps {
+                edgeXSemver('bump patch')
+                edgeXSemver('-push')
+            }
         }
     }
 
-    edgeXPRStage {
-        stage('Non-Release Branch or PR') {
-            if(env.ghprbActualCommit) {
-                println "Triggered by GHPRB plugin doing extra stuff maybe?"
-
-                if(env.ghprbCommentBody != "null") {
-                    if(env.ghprbCommentBody =~ /^recheck$/) {
-                        //No semver functions on recheck
-                        echo 'Recheck'
-                    }
-                }
-                else {
-                    //No semver stuff on new pr or push?
-                }
+    post {
+        failure {
+            script {
+                currentBuild.result = "FAILED"
             }
+        }
+        always {
+            edgeXInfraPublish()
         }
     }
 }
 
-def loadGlobalLibrary() {
+def loadGlobalLibrary(branch = '*/master') {
     library(identifier: 'edgex-global-pipelines@master', 
         retriever: legacySCM([
             $class: 'GitSCM',
-            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry-holding/edgex-global-pipelines.git']],
-            branches: [[name: '*/master']],
+            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry/edgex-global-pipelines.git']],
+            branches: [[name: branch]],
             doGenerateSubmoduleConfigurations: false,
             extensions: [[
                 $class: 'SubmoduleOption',
