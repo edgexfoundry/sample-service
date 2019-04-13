@@ -53,6 +53,7 @@ pipeline {
                         dockerfile {
                             filename 'docker/Dockerfile'
                             label 'ubuntu18.04-docker-arm64-4c-2g'
+                            // additionalBuildArgs '--platform linux/arm64' //only works with experimental on
                             args '-u 0:0' // needed for go mod cache
                         }
                     }
