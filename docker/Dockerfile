@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-FROM golang:1.11-alpine
+FROM golang:1.11.8-alpine
 
 ENV GO111MODULE=on
 ENV GOCACHE=/tmp/.cache
