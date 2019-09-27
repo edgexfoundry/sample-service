@@ -77,7 +77,12 @@ pipeline {
         }
 
         stage('🏷️ Semver Tag') {
-            when { expression { edgex.isReleaseStream() } }
+            when {
+                allOf {
+                    expression { edgex.isReleaseStream() }
+                    expression { !edgeXSemver.isHeadTagEnv() }
+                }
+            }
             steps {
                 edgeXSemver('tag')
             }
@@ -100,7 +105,12 @@ pipeline {
         }
 
         stage('⬆️ Semver Bump Patch Version') {
-            when { expression { edgex.isReleaseStream() } }
+            when {
+                allOf {
+                    expression { edgex.isReleaseStream() }
+                    expression { !edgeXSemver.isHeadTagEnv() }
+                }
+            }
             steps {
                 edgeXSemver('bump patch')
                 edgeXSemver('push')
