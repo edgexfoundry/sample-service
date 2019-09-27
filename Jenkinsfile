@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-loadGlobalLibrary()
+loadGlobalLibrary('US5237')
 
 pipeline {
     agent {
@@ -71,6 +71,7 @@ pipeline {
                 script {
                     def semverVersion = edgeXSemver()
                     env.setProperty('VERSION', semverVersion)
+                    sh 'env'
                 }
             }
         }
@@ -102,7 +103,7 @@ pipeline {
             when { expression { edgex.isReleaseStream() } }
             steps {
                 edgeXSemver('bump patch')
-                edgeXSemver('-push')
+                edgeXSemver('push')
             }
         }
     }
@@ -123,7 +124,7 @@ def loadGlobalLibrary(branch = '*/master') {
     library(identifier: 'edgex-global-pipelines@master', 
         retriever: legacySCM([
             $class: 'GitSCM',
-            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry/edgex-global-pipelines.git']],
+            userRemoteConfigs: [[url: 'https://github.com/soda480/edgex-global-pipelines.git']],
             branches: [[name: branch]],
             doGenerateSubmoduleConfigurations: false,
             extensions: [[
