@@ -14,9 +14,7 @@
 // limitations under the License.
 //
 
-library 'edgex-global-pipelines@v1.0.17'
-
-edgeXBuildGoApp(
+edgeXBuildGoApp (
     project: 'sample-service',
     goVersion: '1.12',
     buildImage: false
