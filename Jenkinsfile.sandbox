@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@Library("edgex-global-pipelines@v1.0.18") _
+@Library("edgex-global-pipelines@v1.0.19") _
 
 edgeXBuildGoApp (
     project: 'sample-service',
