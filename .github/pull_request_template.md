@@ -1,17 +1,26 @@
-# Type of change? <!-- [x] all the boxes that apply -->
+## PR Checklist
+Please check if your PR fulfills the following requirements:
 
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Enhancement
-- [ ] Breaking change (breaks backward compatibility)
+- [ ] The commit message follows our guidelines: https://github.com/edgexfoundry/ci-management/blob/master/.github/CONTRIBUTING.md
+- [ ] Tests for the changes have been added (for bug fixes / features)
+- [ ] Added labels
+## PR Type
+What kind of change does this PR introduce?
+<!-- Please check the one that applies to this PR using "x". -->
 
-# Description, Context, Motivation <!-- Please help us reviewing your PR -->
+- [ ] Bugfix
+- [ ] Feature
+- [ ] Code style update (formatting, local variables)
+- [ ] Refactoring (no functional changes, no api changes)
+- [ ] Documentation content changes
+- [ ] Other... Please describe:
 
-...
+## Issue Number:
 
-**Checklist:**
+## Sandbox Testing
+Test Links :
 
-- [ ] All tests passed
-- [ ] The code follows the code style and conventions of this project
-- [ ] The change requires a change to the documentation
-- [ ] I have updated the documentation accordingly
+
+## Are there any specific instructions or things that should be known prior to reviewing?
+
+## Other information
