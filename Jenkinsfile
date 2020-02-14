@@ -19,8 +19,8 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                configFileProvider([configFile(fileId: 'swaggerhub-api-key', variable: 'TESTING')]) {
-                    sh 'echo $TESTING | base64'
+                configFileProvider([configFile(fileId: 'swaggerhub-api-key', variable: 'CONFIG_FILE')]) {
+                    sh 'cat $CONFIG_FILE | base64'
                 }
             }
         }
