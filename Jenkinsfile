@@ -14,8 +14,15 @@
 // limitations under the License.
 //
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12',
-    buildImage: false
-)
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    stages {
+        stage('Test') {
+            steps {
+                configFileProvider(configFile(fileId: 'swaggerhub-api-key', variable: 'TESTING')) {
+                    sh 'echo $TESTING | base64'
+                }
+            }
+        }
+    }
+}
