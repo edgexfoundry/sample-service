@@ -23,7 +23,7 @@ edgeXBuildGoApp (
 )
 
 def loadGlobalLibrary(branch = 'master') {
-    library(identifier: 'edgex-global-pipelines@branch',
+    library(identifier: 'edgex-global-pipelines-override@branch',
         changelog: false,
         retriever: legacySCM([
             $class: 'GitSCM',
