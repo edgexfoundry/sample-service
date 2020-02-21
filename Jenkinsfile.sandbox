@@ -16,6 +16,8 @@
 
 loadGlobalLibrary('custom-branch')
 
+edgex.customBannerMessage('Testing new method')
+
 edgeXBuildGoApp (
     project: 'sample-service',
     goVersion: '1.12',
