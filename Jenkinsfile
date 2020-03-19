@@ -17,6 +17,5 @@
 
 edgeXBuildGoApp (
     project: 'sample-service',
-    goVersion: '1.12',
-    buildImage: false
+    goVersion: '1.12'
 )
