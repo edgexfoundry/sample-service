@@ -15,7 +15,31 @@
 //
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12'
-)
+// edgeXBuildGoApp (
+//     project: 'sample-service',
+//     goVersion: '1.12'
+// )
+
+pipeline {
+    agent {
+        label 'centos7-docker-4c-2g'
+    }
+    options {
+        timestamps()
+        quietPeriod(5)
+        durabilityHint 'PERFORMANCE_OPTIMIZED'
+        timeout(360)
+    }
+    stages {
+        stage('Execute') {
+            steps {
+                edgeXReleaseGitTag([
+                    'name': 'sample-service',
+                    'version': '0.1.1',
+                    'releaseStream': 'master',
+                    'repo': 'https://github.com/edgexfoundry/sample-service.git'
+                ])
+            }
+        }
+    }
+}
