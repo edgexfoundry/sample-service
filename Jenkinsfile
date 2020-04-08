@@ -15,7 +15,14 @@
 //
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12'
-)
+// edgeXBuildGoApp (
+//     project: 'sample-service',
+//     goVersion: '1.12'
+// )
+
+edgeXReleaseGitTag([
+    'name': 'sample-service',
+    'version': '0.1.1',
+    'releaseStream': 'master',
+    'repo': 'https://github.com/edgexfoundry/sample-service.git'
+])
