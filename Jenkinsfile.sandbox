@@ -16,8 +16,22 @@
 
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12',
-    buildImage: false
-)
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    stages {
+        stage('Sample') {
+            steps {
+                sh 'env | sort'
+                sh 'git status'
+                sh 'git remote -v'
+                sh 'git log'
+            }
+        }
+    }
+}
+
+// edgeXBuildGoApp (
+//     project: 'sample-service',
+//     goVersion: '1.12',
+//     buildImage: false
+// )
