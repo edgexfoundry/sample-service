@@ -17,6 +17,9 @@
 
 pipeline {
     agent { label 'centos7-docker-4c-2g' }
+    environment {
+        DOCKER_CLI_EXPERIMENTAL = 'enabled'
+    }
     stages {
         stage('Manifest Test') {
             steps {
