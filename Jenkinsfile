@@ -15,7 +15,15 @@
 //
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12'
-)
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    stages {
+        stage('Manifest Test') {
+            steps {
+                sh 'docker version'
+                sh 'docker manifest --help'
+                sh 'docker manifest create --help'
+            }
+        }
+    }
+}
