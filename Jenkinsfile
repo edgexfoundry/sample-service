@@ -13,9 +13,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@experimental") _
-
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12'
-)
+@Library("edgex-global-pipelines@8fbf50bd0db4f5c0c1b6cc937d327074156437e6") _
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    
+    environment {
+        DRY_RUN = 'false'
+    }
+    
+    options {
+        timestamps()
+        preserveStashes()
+        quietPeriod(5) // wait a few seconds before starting to aggregate builds...??
+        durabilityHint 'PERFORMANCE_OPTIMIZED'
+        timeout(360)
+    }
+    stages {
+        stage('Functional Testing Setup') {
+            steps {
+                git branch: 'master', url: 'https://github.com/edgexfoundry/sample-service'
+            }
+        }
+        stage('Functional Test of edgeXSwaggerPublish and 2 custom API paths.'){
+            steps{
+                withCredentials([string(credentialsId: 'swaggerhub-api-key', variable: 'SWAGGER_TOKEN')]) {
+                    sh 'echo "$SWAGGER_TOKEN" > APIKEY'
+                    edgeXSwaggerPublish(apiFolders:'api/openapi/v1 api/openapi/v2')
+                }
+            }
+        }
+    }
+    post {
+        cleanup {
+            cleanWs()
+        }
+    }
+}

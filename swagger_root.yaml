@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: sample-service-demo
+  title: sample-service-demo-root-folder
   description: Do Not Use. This is the sample api for the sample-service. This contains information only for the testing of the integration of Swagger and associated libraries. Loosely based on core-command api.
-  version: 1.1.1
+  version: 4.4.4
 servers:
 - url: http://localhost:48082/api
 paths:
