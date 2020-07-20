@@ -27,7 +27,7 @@ pipeline {
                 sh 'docker push nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:x86_64'
 
                 sh 'docker pull nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder-arm64:latest'
-                sh 'docker tag docker pull nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder-arm64:latest nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:aarch64'
+                sh 'docker tag nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder-arm64:latest nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:aarch64'
                 sh 'docker push nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:aarch64'
             }
         }
