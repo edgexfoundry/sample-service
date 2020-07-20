@@ -15,8 +15,21 @@
 //
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.12',
-    buildExperimentalDockerImage: true
-)
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    stages {
+        stage('Build') {
+            steps {
+                edgeXDockerLogin(settingsFile: 'sample-service-settings')
+
+                sh 'docker pull nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:latest'
+                sh 'docker tag nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:latest nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:x86_64'
+                sh 'docker push nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:x86_64'
+
+                sh 'docker pull nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder-arm64:latest'
+                sh 'docker tag docker pull nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder-arm64:latest nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:aarch64'
+                sh 'docker push nexus3.edgexfoundry.org:10003/edgex-devops/edgex-docs-builder:aarch64'
+            }
+        }
+    }
+}
