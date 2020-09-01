@@ -1,0 +1,57 @@
+name: "sample-service"
+manufacturer: "Intel"
+model: "Sample Service - DevOps WG"
+labels:
+- "sample-service-example"
+description: "Example of a Sample Service for the DevOps working group."
+
+deviceResources:
+-
+  name: "RandomValue_Int8"
+  description: "Generate random int8 value"
+  properties:
+    value:
+      { type: "Int8", readWrite: "R", minimum: "-128", maximum: "127", defaultValue: "0" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "random int8 value" }
+-
+  name: "Min_Int8"
+  description: "Minimum of random int8 value"
+  properties:
+    value:
+      { type: "Int8", readWrite: "R", minimum: "-128", maximum: "127", defaultValue: "-128" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "random int8 minimum value" }
+-
+  name: "Max_Int8"
+  description: "Maximum of random int8 value"
+  properties:
+    value:
+      { type: "Int8", readWrite: "R", minimum: "-128", maximum: "127", defaultValue: "127" }
+    units:
+      { type: "String", readWrite: "R", defaultValue: "random int8 maximum value" }
+
+deviceCommands:
+  -
+    name: "GenerateRandomValue_Int8"
+    get:
+    - { operation: "get", deviceResource: "RandomValue_Int8" }
+    set:
+    - { operation: "set", deviceResource: "Min_Int8", parameter: "-128" }
+    - { operation: "set", deviceResource: "Max_Int8", parameter: "127" }
+    
+coreCommands:
+  -
+    name: "GenerateRandomValue_Int8"
+    get:
+      path: "/api/v1/device/{deviceId}/GenerateRandomValue_Int8"
+      responses:
+      -
+        code: "200"
+        description: ""
+        expectedValues: ["RandomValue_Int8"]
+      -
+        code: "503"
+        description: "service unavailable"
+        expectedValues: []
+    put:
