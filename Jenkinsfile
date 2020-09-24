@@ -18,5 +18,5 @@
 edgeXBuildGoApp (
     project: 'sample-service',
     goVersion: '1.15'
-    // buildExperimentalDockerImage: true
+    buildExperimentalDockerImage: true
 ) 
