@@ -26,13 +26,14 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                def version = edgeXSemver('init')
-                println "semver version is ${version}"
-
-                edgeXSemver('tag')
-                edgeXSemver('bump pre')
-                edgeXSemver('push')
-                sh 'env'
+                script {
+                    def version = edgeXSemver('init')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                }
             }
         }
     }
