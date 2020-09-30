@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@466a8a9bd9006481dc4ec3bd4d10a6c68ba652eb") _
+@Library("edgex-global-pipelines@6099e5c6ab04cb973443b77e0e33e555f9711d3e") _
 
 pipeline {
     agent any
@@ -55,7 +55,7 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.7')
+                    def version = edgeXSemver('init', '4.1.8')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
@@ -68,7 +68,7 @@ pipeline {
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.7')
+                    def version = edgeXSemver('init', '4.1.8')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
@@ -83,7 +83,7 @@ pipeline {
                 script {
                     def releaseInfo = [:]
                     releaseInfo['name'] = 'sample-service'
-                    releaseInfo['version'] = '4.1.7'
+                    releaseInfo['version'] = '4.1.8'
                     releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
                     releaseInfo['releaseStream'] = 'master'
                     releaseInfo['gitTag'] = true
