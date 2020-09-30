@@ -17,20 +17,10 @@
 
 pipeline {
     agent any
-    options {
-        timestamps()
-    }
-    environment {
-        SEMVER_PRE_PREFIX = 'dev'
-    }
     stages {
         stage('Test') {
             steps {
                 edgeXSemver('init')
-                edgeXSemver('tag')
-                edgeXSemver('bump pre')
-                edgeXSemver('push')
-                sh 'env'
             }
         }
     }
