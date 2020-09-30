@@ -22,6 +22,7 @@ pipeline {
     }
     environment {
         SEMVER_PRE_PREFIX = 'dev'
+        DRY_RUN = 'false'
     }
     stages {
         stage('Git Semver') {
@@ -33,6 +34,7 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    sh 'unset GITSEMVER_HEAD_TAG'
                 }
             }
         }
@@ -45,6 +47,7 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    sh 'unset GITSEMVER_HEAD_TAG'
                 }
             }
         }
@@ -57,6 +60,7 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    sh 'unset GITSEMVER_INIT_VERSION'
                 }
             }
         }
@@ -69,6 +73,7 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    sh 'unset GITSEMVER_INIT_VERSION'
                 }
             }
         }
