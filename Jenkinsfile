@@ -57,7 +57,7 @@ pipeline {
                 script {
                     def version = edgeXSemver('init', '4.1.7')
                     println "semver version is ${version}"
-                    edgeXSemver('tag')
+                    edgeXSemver('tag -f')
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
@@ -70,7 +70,7 @@ pipeline {
                 script {
                     def version = edgeXSemver('init', '4.1.7')
                     println "semver version is ${version}"
-                    edgeXSemver('tag')
+                    edgeXSemver('tag -f')
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
