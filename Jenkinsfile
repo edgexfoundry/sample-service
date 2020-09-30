@@ -24,7 +24,7 @@ pipeline {
         SEMVER_PRE_PREFIX = 'dev'
     }
     stages {
-        stage('Test') {
+        stage('Git Semver') {
             steps {
                 script {
                     def version = edgeXSemver('init')
@@ -33,6 +33,56 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                }
+            }
+        }
+        stage('Git Semver - Repeated') {
+            steps {
+                script {
+                    def version = edgeXSemver('init')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                }
+            }
+        }
+        stage('Build Commit') {
+            steps {
+                script {
+                    def version = edgeXSemver('init', '4.1.7')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                }
+            }
+        }
+        stage('Build Commit - Repeated') {
+            steps {
+                script {
+                    def version = edgeXSemver('init', '4.1.7')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                }
+            }
+        }
+        stage('Release') {
+            steps {
+                script {
+                    def releaseInfo = [:]
+                    releaseInfo['name'] = 'sample-service'
+                    releaseInfo['version'] = '4.1.7'
+                    releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
+                    releaseInfo['releaseStream'] = 'master'
+                    releaseInfo['gitTag'] = true
+
+                    edgeXReleaseGitTag(releaseInfo)
                 }
             }
         }
