@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@6099e5c6ab04cb973443b77e0e33e555f9711d3e") _
+@Library("edgex-global-pipelines@1e02a87cc5c31ae9d13c2938a4d936a49fb1702f") _
 
 pipeline {
     agent any
@@ -55,12 +55,13 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.8')
+                    def version = edgeXSemver('init', '4.1.9')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
                     env.GITSEMVER_INIT_VERSION = ''
                 }
             }
@@ -68,27 +69,44 @@ pipeline {
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.8')
+                    def version = edgeXSemver('init', '4.1.9')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
                     env.GITSEMVER_INIT_VERSION = ''
                 }
             }
         }
-        stage('Release') {
+        stage('Release1') {
             steps {
                 script {
                     def releaseInfo = [:]
                     releaseInfo['name'] = 'sample-service'
-                    releaseInfo['version'] = '4.1.8'
+                    releaseInfo['version'] = '4.1.9'
                     releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
                     releaseInfo['releaseStream'] = 'master'
                     releaseInfo['gitTag'] = true
-
                     edgeXReleaseGitTag(releaseInfo)
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+        stage('Release2') {
+            steps {
+                script {
+                    def releaseInfo = [:]
+                    releaseInfo['name'] = 'sample-service'
+                    releaseInfo['version'] = '4.1.10'
+                    releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
+                    releaseInfo['releaseStream'] = 'master'
+                    releaseInfo['gitTag'] = true
+                    edgeXReleaseGitTag(releaseInfo)
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
                 }
             }
         }
