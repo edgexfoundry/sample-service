@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@dd44ba3edface941896c7afd6c405d565f0ffe47") _
+@Library("edgex-global-pipelines@466a8a9bd9006481dc4ec3bd4d10a6c68ba652eb") _
 
 pipeline {
     agent any
@@ -26,7 +26,9 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                edgeXSemver('init')
+                def version = edgeXSemver('init')
+                println "semver version is ${version}"
+
                 edgeXSemver('tag')
                 edgeXSemver('bump pre')
                 edgeXSemver('push')
