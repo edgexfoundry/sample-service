@@ -23,9 +23,14 @@ pipeline {
     environment {
         SEMVER_PRE_PREFIX = 'dev'
         DRY_RUN = 'false'
+        //SEMVER_BRANCH = 'semver-testing'
     }
     stages {
         stage('Git Semver') {
+            environment {
+                GITSEMVER_HEAD_TAG = ''
+                GITSEMVER_INIT_VERSION = ''
+            }
             steps {
                 script {
                     def version = edgeXSemver('init')
@@ -34,11 +39,14 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
-                    sh 'unset GITSEMVER_HEAD_TAG'
                 }
             }
         }
         stage('Git Semver - Repeated') {
+            environment {
+                GITSEMVER_HEAD_TAG = ''
+                GITSEMVER_INIT_VERSION = ''
+            }
             steps {
                 script {
                     def version = edgeXSemver('init')
@@ -47,11 +55,14 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
-                    sh 'unset GITSEMVER_HEAD_TAG'
                 }
             }
         }
         stage('Build Commit') {
+            environment {
+                GITSEMVER_HEAD_TAG = ''
+                GITSEMVER_INIT_VERSION = ''
+            }
             steps {
                 script {
                     def version = edgeXSemver('init', '4.1.7')
@@ -60,11 +71,14 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
-                    sh 'unset GITSEMVER_INIT_VERSION'
                 }
             }
         }
         stage('Build Commit - Repeated') {
+            environment {
+                GITSEMVER_HEAD_TAG = ''
+                GITSEMVER_INIT_VERSION = ''
+            }
             steps {
                 script {
                     def version = edgeXSemver('init', '4.1.7')
@@ -73,11 +87,14 @@ pipeline {
                     edgeXSemver('bump pre')
                     edgeXSemver('push')
                     sh 'env'
-                    sh 'unset GITSEMVER_INIT_VERSION'
                 }
             }
         }
         stage('Release') {
+            environment {
+                GITSEMVER_HEAD_TAG = ''
+                GITSEMVER_INIT_VERSION = ''
+            }
             steps {
                 script {
                     def releaseInfo = [:]
