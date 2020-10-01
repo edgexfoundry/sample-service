@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@4820db6f26b748ea6ce36b70afc23bcf96f2b64f") _
+@Library("edgex-global-pipelines@eb72c7bce637ed40491bc0e3522a6248a57f613a") _
 
 edgeXBuildGoApp (
     project: 'sample-service',
