@@ -57,7 +57,7 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.10')
+                    def version = edgeXSemver('init', '4.1.15')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
@@ -71,7 +71,7 @@ pipeline {
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.1.10')
+                    def version = edgeXSemver('init', '4.1.15')
                     println "semver version is ${version}"
                     edgeXSemver('tag -force')
                     edgeXSemver('bump pre')
@@ -87,7 +87,7 @@ pipeline {
                 script {
                     def releaseInfo = [:]
                     releaseInfo['name'] = 'sample-service'
-                    releaseInfo['version'] = '4.1.10'
+                    releaseInfo['version'] = '4.1.15'
                     releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
                     releaseInfo['releaseStream'] = 'master'
                     releaseInfo['gitTag'] = true
