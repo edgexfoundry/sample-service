@@ -14,38 +14,42 @@
 # limitations under the License.
 #
 
-ARG BASE=golang:1.13-alpine
-FROM ${BASE} AS builder
+# ARG BASE=golang:1.13-alpine
+# FROM ${BASE} AS builder
 
-ARG ALPINE_PKG_BASE="build-base git openssh-client"
-ARG ALPINE_PKG_EXTRA=""
+# ARG ALPINE_PKG_BASE="build-base git openssh-client"
+# ARG ALPINE_PKG_EXTRA=""
 
-LABEL license='SPDX-License-Identifier: Apache-2.0' \
-  copyright='Copyright (c) 2020: Intel'
+# LABEL license='SPDX-License-Identifier: Apache-2.0' \
+#   copyright='Copyright (c) 2020: Intel'
 
-RUN sed -e 's/dl-cdn[.]alpinelinux.org/nl.alpinelinux.org/g' -i~ /etc/apk/repositories
-RUN apk add --no-cache ${ALPINE_PKG_BASE} ${ALPINE_PKG_EXTRA}
+# RUN sed -e 's/dl-cdn[.]alpinelinux.org/nl.alpinelinux.org/g' -i~ /etc/apk/repositories
+# RUN apk add --no-cache ${ALPINE_PKG_BASE} ${ALPINE_PKG_EXTRA}
 
-WORKDIR /sample-service
+# WORKDIR /sample-service
 
-COPY . .
+# COPY . .
 
-# To run tests in the build container:
-#   docker build --build-arg 'MAKE=build test' .
-# This is handy of you do your Docker business on a Mac
-ARG MAKE='make build'
-RUN $MAKE
+# # To run tests in the build container:
+# #   docker build --build-arg 'MAKE=build test' .
+# # This is handy of you do your Docker business on a Mac
+# ARG MAKE='make build'
+# RUN $MAKE
 
-FROM alpine:latest
+FROM debian:jessie
 
-LABEL license='SPDX-License-Identifier: Apache-2.0' \
-  copyright='Copyright (c) 2020: Intel'
+RUN apt-get update && apt-get install -y imagemagick
 
-ENV APP_PORT=49999
-EXPOSE $APP_PORT
+# FROM alpine:latest
 
-COPY --from=builder /sample-service/cmd /
-COPY --from=builder /sample-service/LICENSE /
-COPY --from=builder /sample-service/Attribution.txt /
+# LABEL license='SPDX-License-Identifier: Apache-2.0' \
+#   copyright='Copyright (c) 2020: Intel'
 
-ENTRYPOINT ["/sample-service","--cp=consul://edgex-core-consul:8500","--confdir=/res","--registry"]
+# ENV APP_PORT=49999
+# EXPOSE $APP_PORT
+
+# COPY --from=builder /sample-service/cmd /
+# COPY --from=builder /sample-service/LICENSE /
+# COPY --from=builder /sample-service/Attribution.txt /
+
+# ENTRYPOINT ["/sample-service","--cp=consul://edgex-core-consul:8500","--confdir=/res","--registry"]
