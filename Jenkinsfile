@@ -21,7 +21,7 @@ pipeline {
         stage('Docker') {
             steps {
                 sh 'sudo cat /etc/docker/daemon.json'
-                sh 'sudo jq \'. + {"registry-mirrors": "https://nexus3.edgexfoundry.org:10001", debug: true}\' /etc/docker/daemon.json | tee /etc/docker/daemon.json'
+                sh 'sudo jq \'. + {"registry-mirrors": "https://nexus3.edgexfoundry.org:10001", debug: true}\' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json'
                 sh 'sudo cat /etc/docker/daemon.json'
                 sh 'sudo service docker restart'
 
