@@ -15,8 +15,13 @@
 //
 @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.15',
-    buildExperimentalDockerImage: true
-)
+pipeline {
+    agent { label 'centos7-docker-4c-2g' }
+    stages {
+        stage('Docker') {
+            steps {
+                sh 'sudo cat /etc/docker/daemon.json'
+            }
+        }
+    }
+}
