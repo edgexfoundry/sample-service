@@ -35,5 +35,7 @@ def enableDockerProxy(proxyHost, debug = false) {
     sh 'sudo mv /tmp/daemon.json /etc/docker/daemon.json'
     sh 'sudo cat /etc/docker/daemon.json'
     sh 'sudo service docker restart | true'
-    sh 'sleep 2 && systemctl status docker.service && journalctl -xe'
+    sh 'sleep 2 && systemctl status docker.service'
+    sh 'tail -200 /var/log/messages'
+    sh 'journalctl -xe'
 }
