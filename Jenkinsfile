@@ -34,5 +34,6 @@ def enableDockerProxy(proxyHost, debug = false) {
     sh "sudo jq \'. + {\"registry-mirrors\": \"${proxyHost}\", debug: ${debug}}\' /etc/docker/daemon.json > /tmp/daemon.json"
     sh 'sudo mv /tmp/daemon.json /etc/docker/daemon.json'
     sh 'sudo cat /etc/docker/daemon.json'
-    sh 'sudo service docker restart'
+    sh 'sudo service docker restart | true'
+    sh 'sleep 2 && systemctl status docker.service'
 }
