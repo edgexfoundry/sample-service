@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Docker') {
             steps {
-                enableDockerProxy('https://nexus3.edgexfoundry.org:10001', true)
+                enableDockerProxy('https://nexus3.edgexfoundry.org:10001')
 
                 sh 'docker pull alpine:3.10'
                 sh 'sudo tail -200 /var/log/messages'
