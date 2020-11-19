@@ -16,7 +16,7 @@
 @Library("edgex-global-pipelines@experimental") _
 
 pipeline {
-    agent { label 'centos7-docker-4c-2g' }
+    agent { label 'ubuntu18.04-docker-arm64-4c-16g' }
     stages {
         stage('Docker') {
             steps {
