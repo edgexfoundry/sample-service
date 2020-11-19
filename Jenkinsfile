@@ -31,7 +31,8 @@ pipeline {
 
 def enableDockerProxy(proxyHost, debug = false) {
     sh 'sudo cat /etc/docker/daemon.json'
-    sh "sudo jq \'. + {\"registry-mirrors\": \"${proxyHost}\", debug: ${debug}}\' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json"
+    sh "sudo jq \'. + {\"registry-mirrors\": \"${proxyHost}\", debug: ${debug}}\' /etc/docker/daemon.json > /tmp/daemon.json"
+    sh 'sudo mv /tmp/daemon.json /etc/docker/daemon.json'
     sh 'sudo cat /etc/docker/daemon.json'
     sh 'sudo service docker restart'
 }
