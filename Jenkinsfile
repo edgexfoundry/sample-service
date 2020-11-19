@@ -20,14 +20,18 @@ pipeline {
     stages {
         stage('Docker') {
             steps {
-                sh 'sudo cat /etc/docker/daemon.json'
-                sh 'sudo jq \'. + {"registry-mirrors": "https://nexus3.edgexfoundry.org:10001", debug: true}\' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json'
-                sh 'sudo cat /etc/docker/daemon.json'
-                sh 'sudo service docker restart'
+                enableDockerProxy('https://nexus3.edgexfoundry.org:10001', true)
 
                 sh 'docker pull alpine:3.10'
                 sh 'sudo tail -200 /var/log/messages'
             }
         }
     }
+}
+
+def enableDockerProxy(proxyHost, debug = false) {
+    sh 'sudo cat /etc/docker/daemon.json'
+    sh "sudo jq \'. + {\"registry-mirrors\": \"${proxyHost}\", debug: ${debug}}\' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json"
+    sh 'sudo cat /etc/docker/daemon.json'
+    sh 'sudo service docker restart'
 }
