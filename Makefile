@@ -1,6 +1,6 @@
 .PHONY: build test clean prepare update docker
 
-GO = CGO_ENABLED=0 GO111MODULE=on go
+GO = CGO_ENABLED=1 GO111MODULE=on go
 
 MICROSERVICES=cmd/sample-service
 
@@ -20,7 +20,7 @@ cmd/sample-service:
 	$(GO) build $(GOFLAGS) -o $@ ./cmd
 
 test:
-	$(GO) test ./... -coverprofile=coverage.out
+	$(GO) test -race ./... -coverprofile=coverage.out
 	$(GO) vet ./...
 	gofmt -l .
 	[ "`gofmt -l .`" = "" ]
