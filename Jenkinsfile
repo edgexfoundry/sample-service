@@ -42,11 +42,11 @@ publishToSwagger() {
             echo "[publishToSwagger] Publishing API Name [$apiName] [$file]"
 
             if [ "$dryRun" == "false" ]; then
-                curl -X POST -d "@${file}" "https://api.swaggerhub.com/apis/${owner}/${apiName}?oas=${oasVersion}&isPrivate=${isPrivate}&force=true" \
+                curl -v -X POST -d "@${file}" \
                     -H "accept:application/json" \
                     -H "Authorization:${apiKey}" \
-                    -H "Content-Type:application/yaml"
-                echo $'\n'
+                    -H "Content-Type:application/yaml" \
+                    "https://api.swaggerhub.com/apis/${owner}/${apiName}?oas=${oasVersion}&isPrivate=${isPrivate}&force=true"
             else
                 echo "[publishToSwagger] Dry Run enabled...Simulating upload"
                 echo "curl -X POST https://api.swaggerhub.com/apis/${owner}/${apiName}?oas=${oasVersion}&isPrivate=${isPrivate}&force=true"
