@@ -14,10 +14,6 @@
 // limitations under the License.
 //
 @Library("edgex-global-pipelines@experimental") _
-
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.15',
-    buildExperimentalDockerImage: true
-)
+ 
+error("Simulating a Build Failure")
 
