@@ -1,4 +1,16 @@
 # sample-service
+[![Build Status](https://jenkins.edgexfoundry.org/job/edgexfoundry/job/sample-service/job/master/badge/icon)](https://jenkins.edgexfoundry.org/job/edgexfoundry/job/sample-service/job/master)
+[![Code Coverage](https://codecov.io/gh/edgexfoundry/sample-service/branch/master/graph/badge.svg?token=QrtB3XMRUl)](https://codecov.io/gh/edgexfoundry/sample-service)
+[![GitHub Tag)](https://img.shields.io/github/v/tag/edgexfoundry/sample-service?include_prereleases&sort=semver&label=latest)](https://github.com/edgexfoundry/sample-service/tags)
+[![GitHub Release](https://img.shields.io/github/v/release/edgexfoundry/sample-service)](https://github.com/edgexfoundry/sample-service/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/edgexfoundry/sample-service)](https://goreportcard.com/report/github.com/edgexfoundry/sample-service)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/edgexfoundry/sample-service)
+![GitHub Issues](https://img.shields.io/github/issues-raw/edgexfoundry/sample-service)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr-raw/edgexfoundry/sample-service)
+![GitHub License](https://img.shields.io/github/license/edgexfoundry/sample-service)
+![GitHub Repo Stars](https://img.shields.io/github/stars/edgexfoundry/sample-service?style=social)
+![GitHub Contributors](https://img.shields.io/github/contributors/edgexfoundry/sample-service)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/edgexfoundry/sample-service)
 
 ## Not for production use
 Sample service is a basic hello-world application that is used by the EdgeX DevOps working group for build automation / validation of Jenkins Pipelines.
