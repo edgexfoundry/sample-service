@@ -20,3 +20,4 @@ edgeXBuildGoApp (
     goVersion: '1.15',
     buildExperimentalDockerImage: true
 )
+
