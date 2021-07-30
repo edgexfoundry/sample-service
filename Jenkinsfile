@@ -13,10 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@experimental") _
+@Library("edgex-global-pipelines@6f965cbc448a8253ab539e4a61c8152a2fdf56cf") _
 
 edgeXBuildGoApp (
     project: 'sample-service',
     goVersion: '1.15',
-    buildExperimentalDockerImage: true
+    buildExperimentalDockerImage: true,
+    buildImage: false
 )
