@@ -11,12 +11,13 @@ DOCKERS=docker_sample_service_go
 
 VERSION=$(shell cat ./VERSION 2>/dev/null || echo 0.0.0)
 GIT_SHA=$(shell git rev-parse HEAD)
-GOFLAGS=-ldflags "-X github.com/edgexfoundry/sample-service.Version=$(VERSION)"
 
-build: tidy $(MICROSERVICES)
+GOFLAGS=-ldflags "-X github.com/edgexfoundry/sample-service.Version=$(VERSION)"
 
 tidy:
 	go mod tidy
+
+build: $(MICROSERVICES)
 
 cmd/sample-service:
 	$(GO) build $(GOFLAGS) -o $@ ./cmd
@@ -24,10 +25,9 @@ cmd/sample-service:
 test:
 	$(GO) test -race ./... -coverprofile=coverage.out
 	$(GO) vet ./...
-	gofmt -l .
-	[ "`gofmt -l .`" = "" ]
+	gofmt -l $$(find . -type f -name '*.go'| grep -v "/vendor/")
+	[ "`gofmt -l $$(find . -type f -name '*.go'| grep -v "/vendor/")`" = "" ]
 	./bin/test-attribution-txt.sh
-	./bin/test-go-mod-tidy.sh
 
 clean:
 	rm -f $(MICROSERVICES)
@@ -42,3 +42,6 @@ docker_sample_service_go:
 		-t edgexfoundry/docker-sample-service-go:$(GIT_SHA) \
 		-t edgexfoundry/docker-sample-service-go:$(VERSION)-dev \
 		.
+
+vendor:
+	go mod vendor
