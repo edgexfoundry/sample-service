@@ -28,6 +28,8 @@ RUN apk add --no-cache ${ALPINE_PKG_BASE} ${ALPINE_PKG_EXTRA}
 
 WORKDIR /sample-service
 
+RUN wget -O ./README.md "https://raw.githubusercontent.com/edgexfoundry/edgex-global-pipelines/main/README.md"
+
 COPY . .
 RUN [ ! -d "vendor" ] && go mod download all || echo "skipping..."
 
