@@ -23,13 +23,43 @@ pipeline {
                 SSH_KNOWN_HOSTS='/etc/ssh/ssh_known_hosts'
                 SEMVER_BRANCH = 'main'
             }
-            steps {
-                script {
-                    //setupKnownHosts()
-                    docker.image('nexus3.edgexfoundry.org:10004/edgex-devops/git-semver:latest').inside('-u 0:0 -v /etc/ssh:/etc/ssh') {
-                        sshagent (credentials: ['edgex-jenkins-ssh']) {
-                            sh 'git semver init'
-                            sh 'git semver'
+            parallel {
+                stage('foo-bar-1') {
+                    steps {
+                        script {
+                            setupKnownHosts()
+                            docker.image('nexus3.edgexfoundry.org:10004/edgex-devops/git-semver:latest').inside('-u 0:0 -v /etc/ssh:/etc/ssh') {
+                                sshagent (credentials: ['edgex-jenkins-ssh']) {
+                                    sh 'git semver init'
+                                    sh 'git semver'
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('foo-bar-2') {
+                    steps {
+                        script {
+                            setupKnownHosts()
+                            docker.image('nexus3.edgexfoundry.org:10004/edgex-devops/git-semver:latest').inside('-u 0:0 -v /etc/ssh:/etc/ssh') {
+                                sshagent (credentials: ['edgex-jenkins-ssh']) {
+                                    sh 'git semver init'
+                                    sh 'git semver'
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('foo-bar-3') {
+                    steps {
+                        script {
+                            setupKnownHosts()
+                            docker.image('nexus3.edgexfoundry.org:10004/edgex-devops/git-semver:latest').inside('-u 0:0 -v /etc/ssh:/etc/ssh') {
+                                sshagent (credentials: ['edgex-jenkins-ssh']) {
+                                    sh 'git semver init'
+                                    sh 'git semver'
+                                }
+                            }
                         }
                     }
                 }
