@@ -25,7 +25,7 @@ pipeline {
             }
             steps {
                 script {
-                    setupKnownHosts()
+                    //setupKnownHosts()
                     docker.image('nexus3.edgexfoundry.org:10004/edgex-devops/git-semver:latest').inside('-u 0:0 -v /etc/ssh:/etc/ssh') {
                         sshagent (credentials: ['edgex-jenkins-ssh']) {
                             sh 'git semver init'
