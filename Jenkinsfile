@@ -25,6 +25,7 @@ pipeline {
             steps {
                 sh 'sudo yum list installed'
                 sh 'docker version'
+                sh 'docker buildx build --help'
             }
             // parallel {
             //     stage('foo-bar-1') {
