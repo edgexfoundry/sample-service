@@ -23,6 +23,7 @@ pipeline {
                 SEMVER_BRANCH = 'main'
             }
             steps {
+                sh 'sudo yum list installed'
                 sh 'docker version'
             }
             // parallel {
