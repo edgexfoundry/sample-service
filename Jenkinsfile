@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@dbabfa3a19fcfc3e1a4bab34ad0c09e70d88619b") _
+@Library("edgex-global-pipelines@stable") _
 
 pipeline {
     agent { label 'centos7-docker-4c-2g' }
