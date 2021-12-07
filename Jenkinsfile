@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@experimental") _
+@Library("edgex-global-pipelines@dbabfa3a19fcfc3e1a4bab34ad0c09e70d88619b") _
 
 pipeline {
     agent { label 'centos7-docker-4c-2g' }
@@ -22,31 +22,26 @@ pipeline {
             environment {
                 SEMVER_BRANCH = 'main'
             }
-            steps {
-                sh 'sudo yum list installed'
-                sh 'docker version'
-                sh 'docker buildx build --help'
+            parallel {
+                stage('foo-bar-1') {
+                    steps {
+                        edgeXSemver('init')
+                        sh 'cat VERSION'
+                    }
+                }
+                stage('foo-bar-2') {
+                    steps {
+                        edgeXSemver('init')
+                        sh 'cat VERSION'
+                    }
+                }
+                stage('foo-bar-3') {
+                    steps {
+                        edgeXSemver('init')
+                        sh 'cat VERSION'
+                    }
+                }
             }
-            // parallel {
-            //     stage('foo-bar-1') {
-            //         steps {
-            //             edgeXSemver('init')
-            //             sh 'cat VERSION'
-            //         }
-            //     }
-            //     stage('foo-bar-2') {
-            //         steps {
-            //             edgeXSemver('init')
-            //             sh 'cat VERSION'
-            //         }
-            //     }
-            //     stage('foo-bar-3') {
-            //         steps {
-            //             edgeXSemver('init')
-            //             sh 'cat VERSION'
-            //         }
-            //     }
-            // }
         }
     }
 }
