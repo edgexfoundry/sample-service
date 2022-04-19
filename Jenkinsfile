@@ -15,8 +15,87 @@
 //
 @Library("edgex-global-pipelines@e0ac08cdbe24897c8aedcab592fc8b7f92894962") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    goVersion: '1.16',
-    buildExperimentalDockerImage: true
-)
+pipeline {
+    agent any
+    options {
+        timestamps()
+    }
+    environment {
+        SEMVER_PRE_PREFIX = 'dev'
+        DRY_RUN = 'false'
+        //SEMVER_BRANCH = 'semver-testing'
+    }
+    stages {
+        stage('Git Semver') {
+            steps {
+                script {
+                    def version = edgeXSemver('init')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+        stage('Git Semver - Repeated') {
+            steps {
+                script {
+                    def version = edgeXSemver('init')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+        stage('Build Commit') {
+            steps {
+                script {
+                    def version = edgeXSemver('init', '4.3.0')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag -force')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+        stage('Build Commit - Repeated') {
+            steps {
+                script {
+                    def version = edgeXSemver('init', '4.3.0')
+                    println "semver version is ${version}"
+                    edgeXSemver('tag -force')
+                    edgeXSemver('bump pre')
+                    edgeXSemver('push')
+                    sh 'env'
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+        stage('Release') {
+            steps {
+                script {
+                    def releaseInfo = [:]
+                    releaseInfo['name'] = 'sample-service'
+                    releaseInfo['version'] = '4.3.0'
+                    releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
+                    releaseInfo['releaseStream'] = 'main'
+                    releaseInfo['gitTag'] = true
+                    edgeXReleaseGitTag(releaseInfo)
+                    env.GITSEMVER_HEAD_TAG = ''
+                    env.GITSEMVER_INIT_VERSION = ''
+                }
+            }
+        }
+    }
+}
