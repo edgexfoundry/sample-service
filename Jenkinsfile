@@ -57,7 +57,7 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.3.0')
+                    def version = edgeXSemver('init', '4.4.0')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
@@ -71,7 +71,7 @@ pipeline {
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.3.0')
+                    def version = edgeXSemver('init', '4.4.0')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
@@ -82,20 +82,20 @@ pipeline {
                 }
             }
         }
-        stage('Release') {
-            steps {
-                script {
-                    def releaseInfo = [:]
-                    releaseInfo['name'] = 'sample-service'
-                    releaseInfo['version'] = '4.3.0'
-                    releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
-                    releaseInfo['releaseStream'] = 'main'
-                    releaseInfo['gitTag'] = true
-                    edgeXReleaseGitTag(releaseInfo)
-                    env.GITSEMVER_HEAD_TAG = ''
-                    env.GITSEMVER_INIT_VERSION = ''
-                }
-            }
-        }
+        // stage('Release') {
+        //     steps {
+        //         script {
+        //             def releaseInfo = [:]
+        //             releaseInfo['name'] = 'sample-service'
+        //             releaseInfo['version'] = '4.3.0'
+        //             releaseInfo['repo'] = 'https://github.com/edgexfoundry/sample-service.git'
+        //             releaseInfo['releaseStream'] = 'main'
+        //             releaseInfo['gitTag'] = true
+        //             edgeXReleaseGitTag(releaseInfo)
+        //             env.GITSEMVER_HEAD_TAG = ''
+        //             env.GITSEMVER_INIT_VERSION = ''
+        //         }
+        //     }
+        // }
     }
 }
