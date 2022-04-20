@@ -57,7 +57,7 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.4.0')
+                    def version = edgeXSemver('init', '4.5.0')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
@@ -71,7 +71,7 @@ pipeline {
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.4.0')
+                    def version = edgeXSemver('init', '4.5.0')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
