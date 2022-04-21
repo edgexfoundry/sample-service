@@ -57,7 +57,7 @@ pipeline {
         stage('Build Commit') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.6.0')
+                    def version = edgeXSemver('init', '4.9.0')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
@@ -65,13 +65,14 @@ pipeline {
                     sh 'env'
                     env.GITSEMVER_HEAD_TAG = ''
                     env.GITSEMVER_INIT_VERSION = ''
+                    sh 'sleep 60'
                 }
             }
         }
         stage('Build Commit - Repeated') {
             steps {
                 script {
-                    def version = edgeXSemver('init', '4.7.0')
+                    def version = edgeXSemver('init', '5.1.2')
                     println "semver version is ${version}"
                     edgeXSemver('tag --force')
                     edgeXSemver('bump pre')
