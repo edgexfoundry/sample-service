@@ -1,14 +1,10 @@
 # github.com/BurntSushi/toml v0.3.1
-## explicit
 github.com/BurntSushi/toml
 # github.com/OneOfOne/xxhash v1.2.6
-## explicit
 github.com/OneOfOne/xxhash
 # github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da
-## explicit
 github.com/armon/go-metrics
 # github.com/cenkalti/backoff v2.2.1+incompatible
-## explicit
 github.com/cenkalti/backoff
 # github.com/edgexfoundry/device-sdk-go v1.2.3
 ## explicit
@@ -28,7 +24,6 @@ github.com/edgexfoundry/device-sdk-go/pkg/models
 github.com/edgexfoundry/device-sdk-go/pkg/service
 github.com/edgexfoundry/device-sdk-go/pkg/startup
 # github.com/edgexfoundry/go-mod-bootstrap v0.0.36
-## explicit
 github.com/edgexfoundry/go-mod-bootstrap/bootstrap
 github.com/edgexfoundry/go-mod-bootstrap/bootstrap/config
 github.com/edgexfoundry/go-mod-bootstrap/bootstrap/container
@@ -42,7 +37,6 @@ github.com/edgexfoundry/go-mod-bootstrap/bootstrap/startup
 github.com/edgexfoundry/go-mod-bootstrap/config
 github.com/edgexfoundry/go-mod-bootstrap/di
 # github.com/edgexfoundry/go-mod-configuration v0.0.3
-## explicit
 github.com/edgexfoundry/go-mod-configuration/configuration
 github.com/edgexfoundry/go-mod-configuration/internal/pkg/consul
 github.com/edgexfoundry/go-mod-configuration/pkg/types
@@ -58,36 +52,28 @@ github.com/edgexfoundry/go-mod-core-contracts/clients/types
 github.com/edgexfoundry/go-mod-core-contracts/clients/urlclient/local
 github.com/edgexfoundry/go-mod-core-contracts/models
 # github.com/edgexfoundry/go-mod-registry v0.1.20
-## explicit
 github.com/edgexfoundry/go-mod-registry/internal/pkg/consul
 github.com/edgexfoundry/go-mod-registry/pkg/types
 github.com/edgexfoundry/go-mod-registry/registry
 # github.com/edgexfoundry/go-mod-secrets v0.0.17
-## explicit
 github.com/edgexfoundry/go-mod-secrets/pkg
 github.com/edgexfoundry/go-mod-secrets/pkg/providers/vault
 # github.com/fxamacker/cbor/v2 v2.2.0
-## explicit
 github.com/fxamacker/cbor/v2
 # github.com/go-kit/kit v0.8.0
-## explicit
 github.com/go-kit/kit/log
 # github.com/go-logfmt/logfmt v0.4.0
-## explicit
 github.com/go-logfmt/logfmt
 # github.com/google/uuid v1.1.1
 ## explicit
 github.com/google/uuid
 # github.com/gorilla/mux v1.7.1
-## explicit
 github.com/gorilla/mux
 # github.com/hashicorp/consul/api v1.1.0
-## explicit
 github.com/hashicorp/consul/api
 # github.com/hashicorp/go-cleanhttp v0.5.1
 github.com/hashicorp/go-cleanhttp
 # github.com/hashicorp/go-immutable-radix v1.0.0
-## explicit
 github.com/hashicorp/go-immutable-radix
 # github.com/hashicorp/go-rootcerts v1.0.0
 github.com/hashicorp/go-rootcerts
@@ -103,29 +89,23 @@ github.com/kr/logfmt
 # github.com/miekg/dns v1.1.4
 ## explicit
 # github.com/mitchellh/consulstructure v0.0.0-20190329231841-56fdc4d2da54
-## explicit
 github.com/mitchellh/consulstructure
 # github.com/mitchellh/copystructure v1.0.0
-## explicit
 github.com/mitchellh/copystructure
 # github.com/mitchellh/go-homedir v1.1.0
 ## explicit
 github.com/mitchellh/go-homedir
 # github.com/mitchellh/mapstructure v1.1.2
-## explicit
 github.com/mitchellh/mapstructure
 # github.com/mitchellh/reflectwalk v1.0.0
 github.com/mitchellh/reflectwalk
 # github.com/pelletier/go-toml v1.2.0
-## explicit
 github.com/pelletier/go-toml
 # github.com/pkg/errors v0.8.1
-## explicit
 github.com/pkg/errors
 # github.com/x448/float16 v0.8.4
 github.com/x448/float16
 # golang.org/x/net v0.0.0-20190228165749-92fc7df08ae7
 ## explicit
 # gopkg.in/yaml.v2 v2.2.8
-## explicit
 gopkg.in/yaml.v2
