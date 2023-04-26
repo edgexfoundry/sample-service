@@ -13,10 +13,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-@Library("edgex-global-pipelines@experimental") _
+// @Library("edgex-global-pipelines@experimental") _
 
-edgeXBuildGoApp (
-    project: 'sample-service',
-    buildExperimentalDockerImage: true,
-    //snykDebug: true
-)
+pipeline {
+    agent {
+        node {
+            label edgex.mainNode([:])
+        }
+    }
+    options {
+        timestamps()
+        preserveStashes()
+        quietPeriod(5) // wait a few seconds before starting to aggregate builds...??
+        durabilityHint 'PERFORMANCE_OPTIMIZED'
+        timeout(360)
+    }
+    triggers {
+        issueCommentTrigger('.*^recheck$.*')
+    }
+    parameters {
+        string(
+            name: 'JobName',
+            defaultValue: '',
+            description: 'The job name')
+        string(
+            name: 'CommitId',
+            defaultValue: '',
+            description: 'The commitId in the code repository from where to initiate the build - should be used only if building via edgeXRelease')
+    }
+    stages {
+        stage('Check Commit ID') {
+            steps {
+                script {
+                    if(params.JobName) {
+                        sh "echo Hey I got this Job Name [${params.JobName}]"
+                    }
+
+                    if(params.CommitId) {
+                        sh "echo Hey I got this CommitId [${params.CommitId}]"
+                        sh "echo git checkout ${params.CommitId}"
+                    }
+                }
+            }
+        }
+    }
+}
