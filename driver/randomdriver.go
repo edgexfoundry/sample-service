@@ -5,7 +5,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // This package provides a implementation of a ProtocolDriver interface.
-//
 package driver
 
 import (
