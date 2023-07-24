@@ -1,10 +1,9 @@
 name: Create Release
-on:  
+on:
   push:
     tags:
       - 'v*'
-    tags-ignore:
-      - '*-dev.*'
+      - '!v*-dev*'
 jobs:
   release:
     runs-on: ubuntu-latest
