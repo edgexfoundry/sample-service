@@ -6,8 +6,6 @@ on:
       - '!v*-dev*'
 jobs:
   release:
-    runs-on: ubuntu-latest
+    uses: edgexfoundry/edgex-global-pipelines/.github/workflows/release.yml@release-action
     permissions:
       contents: write
-    steps:
-      - uses: edgexfoundry/edgex-global-pipelines/.github/workflows/release.yml@release-action
