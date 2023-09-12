@@ -1,6 +1,6 @@
 .PHONY: build test clean prepare update docker
 
-GO = CGO_ENABLED=1 GO111MODULE=on go
+GO = CGO_ENABLED=1 go
 
 MICROSERVICES=cmd/sample-service
 
@@ -14,6 +14,8 @@ GIT_SHA=$(shell git rev-parse HEAD)
 
 GOFLAGS=-ldflags "-X github.com/edgexfoundry/sample-service.Version=$(VERSION)"
 
+GOTESTFLAGS ?=-race
+
 tidy:
 	go mod tidy
 
@@ -22,12 +24,19 @@ build: $(MICROSERVICES)
 cmd/sample-service:
 	$(GO) build $(GOFLAGS) -o $@ ./cmd
 
-test:
-	$(GO) test -race ./... -coverprofile=coverage.out
+test: unit_test
 	$(GO) vet ./...
 	gofmt -l $$(find . -type f -name '*.go'| grep -v "/vendor/")
 	[ "`gofmt -l $$(find . -type f -name '*.go'| grep -v "/vendor/")`" = "" ]
 	./bin/test-attribution-txt.sh
+
+unit_test:
+ifneq (,$(findstring json,$(GOTESTFLAGS)))
+	$(GO) install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
+	$(GO) test $(GOTESTFLAGS) ./... -coverprofile=coverage.out | gotestfmt
+else
+	$(GO) test $(GOTESTFLAGS) ./... -coverprofile=coverage.out
+endif
 
 clean:
 	rm -f $(MICROSERVICES)
