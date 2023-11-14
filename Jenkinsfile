@@ -18,6 +18,6 @@
 edgeXBuildGoApp (
     project: 'sample-service',
     buildExperimentalDockerImage: true,
-    testScript: 'make test GOTESTFLAGS="-json -v"'
-    //snykDebug: true
+    testScript: 'make test GOTESTFLAGS="-json -v"',
+    goVersion: 1.21,
 )
