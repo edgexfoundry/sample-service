@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-ARG BASE=golang:1.18-alpine3.16
+ARG BASE=golang:1.21-alpine3.18
 FROM ${BASE} AS builder
 
 ARG ALPINE_PKG_BASE="build-base git openssh-client"
 ARG ALPINE_PKG_EXTRA=""
 
 LABEL license='SPDX-License-Identifier: Apache-2.0' \
-  copyright='Copyright (c) 2022: Intel'
+  copyright='Copyright (c) 2023: Intel'
 
 RUN apk add --no-cache ${ALPINE_PKG_BASE} ${ALPINE_PKG_EXTRA}
 
@@ -34,10 +34,10 @@ COPY . .
 ARG MAKE='make build'
 RUN $MAKE
 
-FROM alpine:3.16
+FROM alpine:3.18
 
 LABEL license='SPDX-License-Identifier: Apache-2.0' \
-  copyright='Copyright (c) 2022: Intel'
+  copyright='Copyright (c) 2023: Intel'
 
 ENV APP_PORT=49999
 EXPOSE $APP_PORT
